@@ -7,11 +7,24 @@ using System.Linq;
 public class BotController : MonoBehaviour
 {
 
-    public BotController instance;
-
     private IBaseState activeState;
+    
 
-    public int health = 100;
+    [SerializeField]
+    private int _health = 1000;
+
+    public int Health
+    {
+        get { return _health; }
+        set
+        {
+            _health = value;
+            if(_health <= 0)
+            { 
+                Destroy(this.gameObject);
+            }
+        }
+    }
 
     public RoamState rs;
     public CollectHealthState cs;
@@ -19,19 +32,21 @@ public class BotController : MonoBehaviour
 
     public List<GameObject> players = new List<GameObject>();
     public bool enemySighted = false;
+    public Transform enemy;
+
+    float tempTime = 5.0f;
+    float tempTimeReset = 5.0f;
+
+    public GameObject sender;
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
+        // state references.
         rs = GetComponent<RoamState>();
         cs = GetComponent<CollectHealthState>();
         ss = GetComponent<ShootState>();
 
+        // initialize states.
         rs.enabled = true;
         cs.enabled = false;
     }
@@ -50,23 +65,27 @@ public class BotController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Run state specific code
         if (activeState != null)
         {
             activeState.StateUpdate();
         }
+
         if (!enemySighted)
         {
             foreach (GameObject go in players)
             {
-                if (Vector3.Distance(transform.position, go.transform.position) < 20.0f)
+                if (Vector3.Distance(transform.position, go.transform.position) < 50.0f)
                 {
+                   //Debug.DrawLine(transform.position, go.transform.position, Color.red, 0.5f);
                     Vector3 targetDir = go.transform.position - transform.position;
                     Vector3 forward = transform.forward;
                     float angle = Vector3.Angle(targetDir, forward);
-                    if (angle < 15.0F)
+                    if (angle < 20.0F)
                     {
                         Debug.Log("Enemy Sighted " + this.name);
                         enemySighted = true;
+                        enemy = go.transform;
                         activeState.enabled = false;
                         ss.enabled = true;
                         activeState = ss;
@@ -75,28 +94,40 @@ public class BotController : MonoBehaviour
                 }
             }
         }
+        else if(Vector3.Distance(transform.position , enemy.transform.position) > 50.0f)
+        {
+            enemySighted = false;
+            activeState.enabled = false;
+            rs.enabled = true;
+            activeState = rs;
+        }
+        
     }
 
-    
+    public void exitShootState()
+    {
+        activeState.enabled = false;
+        rs.enabled = true;
+        activeState = rs;
+    }
 
     public void UpdateHealth(int amount)
-    {
-        health += amount;
-        if (health <= 49)
+    { 
+        // need to figure out a trigger for events.
+        Health += amount;
+        if (Health < 50)
         {
             activeState.enabled = false;
             cs.enabled = true;
             activeState = cs;   
         }
-        if (health >= 50)
+        else if (Health >= 50 && activeState == cs)
         {
             activeState.enabled = false;
             rs.enabled = true;
             activeState = rs;
         }
-    }
-
-    
+    }   
 }
 
 [CustomEditor(typeof(BotController))]

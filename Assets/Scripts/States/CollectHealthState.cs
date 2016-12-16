@@ -15,7 +15,7 @@ public class CollectHealthState : IBaseState
 
     public void MoveToHealth()
     {
-        //healthItems = healthItems.OrderBy(x => Vector3.Distance(x.transform.position, bot.transform.position)).ToList();
+        direction = healthItems[nextItem].transform.position - transform.position;
         if (transform.position != healthItems[nextItem].transform.position)
         {
             transform.position = Vector3.MoveTowards(transform.position, healthItems[nextItem].transform.position, moveSpeed * Time.deltaTime);
