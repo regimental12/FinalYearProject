@@ -44,9 +44,11 @@ public class ShootState : IBaseState
             Debug.DrawRay(transform.position, transform.forward, Color.green, 1.0f);
             if(hit.transform.tag == "Player")
             {
-                
-                Debug.Log("hit " + hit.collider.gameObject.name);
-                hit.collider.SendMessage("UpdateHealth", -10);
+                object[] pars = new object[2];
+                pars[0] = this.gameObject;
+                pars[1] = -10;
+                //Debug.Log("bot " + this.name +  " hit " + hit.collider.gameObject.name);
+                hit.collider.SendMessage("UpdateHealth", pars);
             }
         }
     }
@@ -55,7 +57,7 @@ public class ShootState : IBaseState
     void Start()
     {
         bot = gameObject.GetComponent<BotController>();
-        Debug.Log("enter shoot state" + bot.name);
+        //Debug.Log("enter shoot state" + bot.name);
     }
 
     // Update is called once per frame

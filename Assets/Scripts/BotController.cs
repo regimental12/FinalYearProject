@@ -6,10 +6,8 @@ using System.Linq;
 
 public class BotController : MonoBehaviour
 {
-
     private IBaseState activeState;
     
-
     [SerializeField]
     private int _health = 1000;
 
@@ -65,25 +63,32 @@ public class BotController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // needs sorting out
+        // need to see if roam state and then get closest enemy.
+        
         // Run state specific code
         if (activeState != null)
         {
             activeState.StateUpdate();
         }
 
-        if (!enemySighted)
+        // try changeing this to a list in a game manger class that keeps track of bots
+        // bots can notify game manager of death.
+        // need a way for each bot to register a kill.
+        // maybe by accessing the health variable of the hit collider in shoot.
+        foreach (GameObject go in players)
         {
-            foreach (GameObject go in players)
+            if (go != null)
             {
                 if (Vector3.Distance(transform.position, go.transform.position) < 50.0f)
                 {
-                   //Debug.DrawLine(transform.position, go.transform.position, Color.red, 0.5f);
+                    Debug.DrawLine(transform.position, go.transform.position, Color.red, 0.5f);
                     Vector3 targetDir = go.transform.position - transform.position;
                     Vector3 forward = transform.forward;
                     float angle = Vector3.Angle(targetDir, forward);
                     if (angle < 20.0F)
                     {
-                        Debug.Log("Enemy Sighted " + this.name);
+                        //Debug.Log("Enemy Sighted " + this.name);
                         enemySighted = true;
                         enemy = go.transform;
                         activeState.enabled = false;
@@ -94,7 +99,7 @@ public class BotController : MonoBehaviour
                 }
             }
         }
-        else if(Vector3.Distance(transform.position , enemy.transform.position) > 50.0f)
+        if (enemy == null)
         {
             enemySighted = false;
             activeState.enabled = false;
@@ -106,15 +111,21 @@ public class BotController : MonoBehaviour
 
     public void exitShootState()
     {
+        enemy = null;
+        enemySighted = false;
         activeState.enabled = false;
         rs.enabled = true;
         activeState = rs;
+        players = GameObject.FindGameObjectsWithTag("Player").ToList();
+
     }
 
-    public void UpdateHealth(int amount)
+    public void UpdateHealth(object[] pars)
     { 
         // need to figure out a trigger for events.
-        Health += amount;
+        Health += (int)pars[1];
+        sender = pars[0] as GameObject;
+        Debug.Log("hit by someone" + sender.name);
         if (Health < 50)
         {
             activeState.enabled = false;
@@ -142,7 +153,7 @@ public class TakeDamage : Editor
 
         if(GUILayout.Button("Take Damage"))
         {
-            bot.UpdateHealth(-10);
+            //bot.UpdateHealth(-10);
         }
     }
 }
