@@ -125,7 +125,7 @@ public class BotController : MonoBehaviour
         // need to figure out a trigger for events.
         Health += (int)pars[1];
         sender = pars[0] as GameObject;
-        Debug.Log("hit by someone" + sender.name);
+        Debug.Log("hit by someone " + sender.name);
         if (Health < 50)
         {
             activeState.enabled = false;
