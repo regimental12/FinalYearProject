@@ -18,8 +18,9 @@ public class BotController : MonoBehaviour
         {
             _health = value;
             if(_health <= 0)
-            { 
-                Destroy(this.gameObject);
+            {
+                //Destroy(this.gameObject);
+                this.gameObject.SetActive(false);
             }
         }
     }
@@ -54,7 +55,7 @@ public class BotController : MonoBehaviour
     {
         activeState = rs;
 
-        players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        //players = GameObject.FindGameObjectsWithTag("Player").ToList();
 
         MeshRenderer mySkin = this.transform.GetComponent<MeshRenderer>();
         mySkin.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
@@ -76,7 +77,7 @@ public class BotController : MonoBehaviour
         // bots can notify game manager of death.
         // need a way for each bot to register a kill.
         // maybe by accessing the health variable of the hit collider in shoot.
-        foreach (GameObject go in players)
+        foreach (GameObject go in GameManager.Instance.bots)
         {
             if (go != null)
             {
@@ -99,7 +100,7 @@ public class BotController : MonoBehaviour
                 }
             }
         }
-        if (enemy == null)
+        if (enemy.gameObject.activeSelf == false)
         {
             enemySighted = false;
             activeState.enabled = false;
@@ -116,7 +117,7 @@ public class BotController : MonoBehaviour
         activeState.enabled = false;
         rs.enabled = true;
         activeState = rs;
-        players = GameObject.FindGameObjectsWithTag("Player").ToList();
+        players = GameManager.Instance.bots.ToList();
 
     }
 
@@ -125,7 +126,7 @@ public class BotController : MonoBehaviour
         // need to figure out a trigger for events.
         Health += (int)pars[1];
         sender = pars[0] as GameObject;
-        Debug.Log("hit by someone " + sender.name);
+        Debug.Log(this.gameObject.name + "hit by " + sender.name);
         if (Health < 50)
         {
             activeState.enabled = false;
@@ -141,7 +142,7 @@ public class BotController : MonoBehaviour
     }   
 }
 
-[CustomEditor(typeof(BotController))]
+/*[CustomEditor(typeof(BotController))]
 public class TakeDamage : Editor
 {
     public override void OnInspectorGUI()
@@ -156,4 +157,4 @@ public class TakeDamage : Editor
             //bot.UpdateHealth(-10);
         }
     }
-}
+}*/

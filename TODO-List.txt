@@ -1,0 +1,14 @@
+need to just disable bots on death rather than destroying it.
+
+Floaty names for bots
+
+sort out state switching; look at implementing properties.
+
+sort out shooting speed.
+
+look at movement speed to allow for bots to collect heath if damaged.
+
+do bots needs to turn towards the bot shooting at them.
+
+camera switching to view game from bot perspective.
+
