@@ -1,24 +1,30 @@
-need to just disable bots on death rather than destroying it.
+need to just disable bots on death rather than destroying it. DONE
 
-Spawn bots from game manager.
+Spawn bots from game manager. DONE
 
 Floaty names for bots.
 
-sort out state switching; look at implementing properties.
+sort out state switching; look at implementing properties. DONE
 
-sort out shooting speed.
+sort out shooting speed. DONE
 
 look at movement speed to allow for bots to collect heath if damaged.
 
 do bots needs to turn towards the bot shooting at them.
 
-camera switching to view game from bot perspective.
+camera switching to view game from bot perspective. DONE
 
-bot kill list for score keeping.
+bot kill list for score keeping. DONE
 
-need ammo.
+need ammo. DONE
 
-need to reset bots on respawn.
+need to reset bots on respawn. DONE
+
+random spawn health plus ammo at waypoints plus random amount. DONE
+
+Change magic numbers so can be tweaked from unity.
+
+
 
 
 

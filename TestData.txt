@@ -1,0 +1,25 @@
+BOT 0
+Deaths: 1
+Kills: 1
+
+
+BOT 1
+Deaths: 0
+Kills: 1
+
+
+BOT 2
+Deaths: 2
+Kills: 2
+
+
+BOT 3
+Deaths: 1
+Kills: 1
+
+
+BOT 4
+Deaths: 2
+Kills: 0
+
+

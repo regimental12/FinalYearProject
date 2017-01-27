@@ -74,6 +74,7 @@ public class ShootState : IBaseState
                         collider.SendMessage("UpdateHealth", +10);
                         Debug.Log("bot " + this.name +  " hit " + hit.collider.gameObject.name);*/
                         hit.collider.gameObject.GetComponent<BotController>().Health -= 10;
+                        hit.collider.gameObject.GetComponent<BotController>().sender = this.gameObject;
                     }
                 }
                 bot.AmmoAmount -= 1;

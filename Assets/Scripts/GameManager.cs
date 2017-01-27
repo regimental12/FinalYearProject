@@ -23,8 +23,16 @@ public class GameManager : MonoBehaviour {
     public Camera currentCam;
     public int currentCamNo = 1;
 
-    public int inactive = 0;
+    public GameObject goHealthItem;
+    public int _healthITems = 5;
+    public List<HealthItem> LHealthItems = new List<HealthItem>();
 
+    public GameObject goAmmoItem;
+    public int _ammoItem = 5;
+    public List<AmmoItem> LAmmoItem = new List<AmmoItem>();
+
+
+    public List<BotData> BotListSaveData = new List<BotData>();
 
     // Singleton declaration.
     private static GameManager instance = null;
@@ -62,7 +70,21 @@ public class GameManager : MonoBehaviour {
             
             cameraList.Add(go.GetComponentInChildren<Camera>());
         }
-        
+
+        for (int i = 0; i < _healthITems; i++)
+        {
+            int wayPointCounter = Random.Range(0, WayPoints.Count());
+
+            GameObject go = Instantiate(goHealthItem);
+            go.transform.position = WayPoints[wayPointCounter].transform.position + new Vector3(Random.Range(0,10) , 0 , Random.Range(0, 10));
+            //go.transform.rotation = WayPoints[wayPointCounter].transform.rotation;
+
+            wayPointCounter = Random.Range(0, WayPoints.Count());
+            go = Instantiate(goAmmoItem);
+            go.transform.position = WayPoints[wayPointCounter].transform.position + new Vector3(Random.Range(0, 10), 0, Random.Range(0, 10));
+            //go.transform.rotation = WayPoints[wayPointCounter].transform.rotation;
+        }
+
         setBotsActive();
         currentCam.enabled = true;
     }
@@ -78,6 +100,7 @@ public class GameManager : MonoBehaviour {
                 go.GetComponentInChildren<Camera>().enabled = false;
                 go.transform.position = WayPoints[wayPointCounter].transform.position;
                 go.transform.rotation = WayPoints[wayPointCounter].transform.rotation;
+                BotListSaveData.Add(new BotData(go.name));
             }
             
         }
@@ -111,7 +134,10 @@ public class GameManager : MonoBehaviour {
         yield return null;
     }
 
-    
+    void OnApplicationQuit()
+    {
+        SaveData.SaveBotData(BotListSaveData);
+    }
 
     void FixedUpdate()
     {
@@ -120,7 +146,7 @@ public class GameManager : MonoBehaviour {
 
     void OnGUI()
     {
-        if (GUI.Button(new Rect(10, 70, 50, 30), "Switch Camera"))
+        if (GUI.Button(new Rect(10, 70, 200, 30), "Switch Camera"))
         {
             // TODO sort out blank cameras.
             if (cameraList[currentCamNo].gameObject.activeSelf == false)
@@ -141,4 +167,23 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
+}
+
+public class BotData
+{
+    private string _botName;
+    public string BotName { get; set; }
+
+    private int _kills = 0;
+    public int Kills { get; set; }
+
+    private int _deaths = 0;
+    public int Deaths{ get; set; }
+
+    public BotData(string name)
+    {
+        BotName = name;
+    }
+
+    
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using Assets.Scripts.Interfaces;
-using UnityEditor;
+//using UnityEditor;
 using System.Linq;
 using System.Collections;
 
@@ -17,9 +17,6 @@ public class BotController : MonoBehaviour
     public bool enemySighted = false;
     public Transform enemy;
 
-    float tempTime = 5.0f;
-    float tempTimeReset = 5.0f;
-
     public GameObject sender;
 
     [SerializeField]
@@ -34,6 +31,14 @@ public class BotController : MonoBehaviour
             {
                 //Destroy(this.gameObject);
                 this.gameObject.SetActive(false);
+                foreach(BotData bot in GameManager.Instance.BotListSaveData)
+                {
+                    if(bot.BotName == gameObject.name)
+                    {
+                        bot.Deaths++;
+                        sender.SendMessage("increaseKillCount");
+                    }
+                }
             }
             if(_health <= 50)
             {
@@ -41,7 +46,7 @@ public class BotController : MonoBehaviour
                 cs.enabled = true;
                 activeState = cs;
             }
-            if(_health >= 51)
+            if(_health > 51)
             {
                 activeState.enabled = false;
                 rs.enabled = true;
@@ -76,9 +81,6 @@ public class BotController : MonoBehaviour
         }
     }
 
-
-    
-
     void Awake()
     {
         // state references.
@@ -102,7 +104,7 @@ public class BotController : MonoBehaviour
         mySkin.material.color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
     }
 
-    void OnEnable()
+    void OnDisable()
     {
         Health = 100;
         AmmoAmount = 10;
@@ -189,6 +191,18 @@ public class BotController : MonoBehaviour
 
     }
 
+    public void increaseKillCount()
+    {
+        foreach(BotData bot in GameManager.Instance.BotListSaveData)
+        {
+            if(bot.BotName == sender.name)
+            {
+                bot.Kills++;
+            }
+
+        }
+    }
+
    
 
     /*public void UpdateHealth(object[] pars)
@@ -217,7 +231,7 @@ public class BotController : MonoBehaviour
     } */  
 }
 
-[CustomEditor(typeof(BotController))]
+/*[CustomEditor(typeof(BotController))]
 public class TakeDamage : Editor
 {
     public override void OnInspectorGUI()
@@ -237,7 +251,7 @@ public class TakeDamage : Editor
             bot.AmmoAmount -= 10;
         }
     }
-}
+}*/
 
 /*[CustomEditor(typeof(BotController))]
 public class DrainAmmo : Editor
