@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HealthItem : MonoBehaviour
-{
+public class AmmoItem : MonoBehaviour {
+
     bool active = true;
     float timeOut = 5.0f;
     float timeOutReset = 5.0f;
@@ -14,18 +14,17 @@ public class HealthItem : MonoBehaviour
         if (collider.tag == "Player")
         {
             cube.SetActive(false);
-            col.enabled = false;
             active = false;
-            //collider.SendMessage("UpdateHealth", +50);
-            collider.gameObject.GetComponent<BotController>().Health += 50;
+            col.enabled = false;
+            collider.gameObject.GetComponent<BotController>().AmmoAmount += 10;
         }
-          
+
     }
 
     // Use this for initialization
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

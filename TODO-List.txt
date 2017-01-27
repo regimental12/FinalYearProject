@@ -1,6 +1,8 @@
 need to just disable bots on death rather than destroying it.
 
-Floaty names for bots
+Spawn bots from game manager.
+
+Floaty names for bots.
 
 sort out state switching; look at implementing properties.
 
@@ -12,3 +14,16 @@ do bots needs to turn towards the bot shooting at them.
 
 camera switching to view game from bot perspective.
 
+bot kill list for score keeping.
+
+need ammo.
+
+need to reset bots on respawn.
+
+
+
+REPORT
+
+talk about problems with state switching.
+
+how its all implemented.
