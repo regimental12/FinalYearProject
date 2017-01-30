@@ -24,9 +24,9 @@ random spawn health plus ammo at waypoints plus random amount. DONE
 
 Change magic numbers so can be tweaked from unity.
 
+Sort out moving to closest health/ammo itemp
 
-
-
+Main menu screen to choose bots and Health/Ammo items.
 
 REPORT
 

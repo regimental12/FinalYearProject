@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.Interfaces;
 using System.Linq;
+using System;
 
 public class CollectAmmoState : IBaseState
 {
@@ -16,12 +17,22 @@ public class CollectAmmoState : IBaseState
     void Start ()
     {
         bot = GetComponent<BotController>();
+        buildAmmoItemList();
+    }
+
+    private void buildAmmoItemList()
+    {
         AmmoItems = GameObject.FindGameObjectsWithTag("AmmoItem").ToList();
         AmmoItems = AmmoItems.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    void OnEnable()
+    {
+        buildAmmoItemList();
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 
@@ -41,7 +52,10 @@ public class CollectAmmoState : IBaseState
             transform.rotation = Quaternion.LookRotation(newDir);
             return;
         }
-        nextItem++;
+        
+        buildAmmoItemList();
+        
+        //nextItem++;
         if (nextItem > AmmoItems.Count() - 1)
         {
             nextItem = 0;

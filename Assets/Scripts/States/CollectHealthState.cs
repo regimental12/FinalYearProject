@@ -3,6 +3,7 @@ using System.Collections;
 using Assets.Scripts.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class CollectHealthState : IBaseState
 {
@@ -15,6 +16,12 @@ public class CollectHealthState : IBaseState
 
     public void MoveToHealth()
     {
+        if (nextItem > healthItems.Count() - 1)
+        {
+            Debug.Log(healthItems.Count());
+            Debug.Log(nextItem);
+            nextItem = 0;
+        }
         direction = healthItems[nextItem].transform.position - transform.position;
         if (transform.position != healthItems[nextItem].transform.position)
         {
@@ -24,11 +31,11 @@ public class CollectHealthState : IBaseState
             transform.rotation = Quaternion.LookRotation(newDir);
             return;
         }
-        nextItem++;
-        if(nextItem > healthItems.Count() -1)
-        {
-            nextItem = 0;
-        }
+        
+            buildHealthItemList();
+        
+        //nextItem++;
+        
     }
 
     
@@ -36,9 +43,19 @@ public class CollectHealthState : IBaseState
     void Start()
     {
         bot = GetComponent<BotController>();
+        buildHealthItemList();
+
+    }
+
+    void OnEnalbe()
+    {
+        buildHealthItemList();
+    }
+
+    private void buildHealthItemList()
+    {
         healthItems = GameObject.FindGameObjectsWithTag("HealthItem").ToList();
         healthItems = healthItems.OrderBy(x => Vector3.Distance(x.transform.position, transform.position)).ToList();
-
     }
 
     // Update is called once per frame
@@ -49,6 +66,6 @@ public class CollectHealthState : IBaseState
 
     public override void StateUpdate()
     {
-        MoveToHealth();
+        MoveToHealth(); 
     }
 }
