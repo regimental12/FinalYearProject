@@ -28,6 +28,17 @@ Sort out moving to closest health/ammo itemp
 
 Main menu screen to choose bots and Health/Ammo items.
 
+
+FUZZY LOGIC BOT
+
+look at :
+    
+    health > hurt + crit;
+    hurt > crit + health;
+    crit > health + hurt;
+
+
+
 REPORT
 
 talk about problems with state switching.

@@ -5,8 +5,12 @@ using Assets.Scripts.Interfaces;
 using System.Linq;
 using System.Collections;
 
-public class BotController : MonoBehaviour
-{ 
+public class FuzzyBotController : MonoBehaviour
+{
+
+    // need to evaluate health and ammo and weather enemy sited to determine which state to switch to.
+    float range = 0;
+
     // States.
     private IBaseState activeState;
     public RoamState rs;
@@ -19,6 +23,8 @@ public class BotController : MonoBehaviour
 
     public GameObject sender;
 
+    FuzzyLogic logic = new FuzzyLogic();
+
     [SerializeField]
     private int _health = 100;
     public int Health
@@ -27,33 +33,67 @@ public class BotController : MonoBehaviour
         set
         {
             _health = value;
-            if(_health <= 0)
+#region old code
+
+            /*if (_health <= 0)
             {
                 //Destroy(this.gameObject);
                 this.gameObject.SetActive(false);
-                foreach(BotData bot in GameManager.Instance.BotListSaveData)
+                foreach (BotData bot in GameManager.Instance.BotListSaveData)
                 {
-                    if(bot.BotName == gameObject.name)
+                    if (bot.BotName == gameObject.name)
                     {
                         bot.Deaths++;
                         sender.SendMessage("increaseKillCount");
                     }
                 }
             }
-            if(_health <= 50)
+            if (_health <= 50)
             {
                 activeState.enabled = false;
                 cs.enabled = true;
                 activeState = cs;
             }
-            if(_health > 51)
+            if (_health > 51)
             {
                 activeState.enabled = false;
                 rs.enabled = true;
                 activeState = rs;
-            }
-            exitState();    
+            }*/
+#endregion
+            stateSwitcher();
+            //exitState();
         }
+    }
+
+    private void stateSwitcher()
+    {
+        float result = 0;
+
+        result = logic.getValues(Health, AmmoAmount, range);
+
+        if (result <= -5)
+        {
+            activeState = cs;
+            Debug.Log(result);
+        }
+        else if (result < 0 && result > -5)
+        {
+            activeState = ams;
+            Debug.Log(result);
+        }
+        else if (result > 0 && result < 5)
+        {
+            activeState = rs;
+            Debug.Log(result);
+        }
+        else if (result >= 5)
+        {
+            activeState = ss;
+            enemySighted = true;
+            Debug.Log(result);
+        }
+
     }
 
     [SerializeField]
@@ -64,7 +104,8 @@ public class BotController : MonoBehaviour
         set
         {
             _ammoAmount = value;
-            if(_ammoAmount <= 0)
+#region old code
+            /*if (_ammoAmount <= 0)
             {
                 // set seek ammo state.
                 activeState.enabled = false;
@@ -76,8 +117,10 @@ public class BotController : MonoBehaviour
                 activeState.enabled = false;
                 rs.enabled = true;
                 activeState = rs;
-            }
-            exitState();
+            }*/
+#endregion
+            stateSwitcher();
+            //exitState();
         }
     }
 
@@ -95,8 +138,8 @@ public class BotController : MonoBehaviour
         activeState = rs;
     }
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         // Set intitial state.
         activeState = rs;
@@ -107,6 +150,7 @@ public class BotController : MonoBehaviour
 
     void OnDisable()
     {
+        // Reset health and ammo on death
         Health = 100;
         AmmoAmount = 10;
     }
@@ -116,7 +160,7 @@ public class BotController : MonoBehaviour
     {
         // needs sorting out
         // need to see if roam state and then get closest enemy.
-        
+
         // Run state specific code
         if (activeState != null)
         {
@@ -129,7 +173,11 @@ public class BotController : MonoBehaviour
         // maybe by accessing the health variable of the hit collider in shoot.
         foreach (GameObject go in GameManager.Instance.botsList)
         {
-            if (go != null && AmmoAmount > 0)
+            range = Vector3.Distance(transform.position , go.transform.position);
+            
+            enemy = go.transform;
+            stateSwitcher();
+            /*if (go != null && AmmoAmount > 0)
             {
                 // Check distance to enemy.
                 if (Vector3.Distance(transform.position, go.transform.position) < 50.0f)
@@ -142,14 +190,13 @@ public class BotController : MonoBehaviour
                     if (angle < 20.0F)
                     {
                         //Debug.Log("Enemy Sighted " + this.name);
-                        enemySighted = true;
-                        enemy = go.transform;
+                        
                         activeState.enabled = false;
                         ss.enabled = true;
                         activeState = ss;
                     }
                 }
-            }
+            }*/
         }
         if (enemy != null)
         {
@@ -161,7 +208,7 @@ public class BotController : MonoBehaviour
                 activeState = rs;
             }
         }
-        
+
     }
 
     public void exitState()
@@ -169,7 +216,7 @@ public class BotController : MonoBehaviour
         // change to check for health and ammo.
         enemy = null;
         enemySighted = false;
-        if(Health < 50)
+        if (Health < 50)
         {
             activeState.enabled = false;
             cs.enabled = true;
@@ -194,9 +241,9 @@ public class BotController : MonoBehaviour
 
     public void increaseKillCount()
     {
-        foreach(BotData bot in GameManager.Instance.BotListSaveData)
+        foreach (BotData bot in GameManager.Instance.BotListSaveData)
         {
-            if(bot.BotName == sender.name)
+            if (bot.BotName == sender.name)
             {
                 bot.Kills++;
             }
@@ -204,7 +251,7 @@ public class BotController : MonoBehaviour
         }
     }
 
-   
+
 
     /*public void UpdateHealth(object[] pars)
     { 
@@ -229,7 +276,7 @@ public class BotController : MonoBehaviour
     public void UpdateAmmo(object[] pars)
     {
 
-    } */  
+    } */
 }
 
 /*[CustomEditor(typeof(BotController))]

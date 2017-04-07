@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
 
@@ -15,6 +17,8 @@ public class GameManager : MonoBehaviour {
     // reset bot.
     // reactivatebot at random point on timer completion.
 
+
+    private string botsnum = "    ";
     public int numOfBots = 5;
     public GameObject bot;
     public List<GameObject> botsList = new List<GameObject>();
@@ -25,6 +29,8 @@ public class GameManager : MonoBehaviour {
     public Camera currentCam;
     public int currentCamNo = 1;
 
+
+    private string numOfHelathItems = "   ";
     public GameObject goHealthItem;
     public int _healthITems = 5;
     //public List<HealthItem> LHealthItems = new List<HealthItem>();
@@ -73,6 +79,7 @@ public class GameManager : MonoBehaviour {
     void OnLevelWasLoaded()
     {
         cameraList.Add(Camera.main);
+        currentCam = Camera.main;
         WayPoints = GameObject.FindGameObjectsWithTag("WayPoint").ToList();
         for (int i = 0; i < numOfBots; i++)
         {
@@ -93,7 +100,6 @@ public class GameManager : MonoBehaviour {
             go.transform.position = WayPoints[wayPointCounter].transform.position + new Vector3(Random.Range(0, 10), 0, Random.Range(0, 10));
             //go.transform.rotation = WayPoints[wayPointCounter].transform.rotation;
 
-            Random.seed = (int)Time.time + (int) Random.Range(0, 101);
             wayPointCounter = Random.Range(0, WayPoints.Count());
             go = Instantiate(goAmmoItem);
             go.transform.position = WayPoints[wayPointCounter].transform.position + new Vector3(Random.Range(0, 10), 0, Random.Range(0, 10));
@@ -110,6 +116,7 @@ public class GameManager : MonoBehaviour {
         {
             if (go.gameObject.activeSelf == false)
             {
+                Random.seed = (int) Time.time + (int)Random.Range(0, 101);
                 int wayPointCounter = Random.Range(0, WayPoints.Count());
                 go.SetActive(true);
                 go.GetComponentInChildren<Camera>().enabled = false;
@@ -135,6 +142,9 @@ public class GameManager : MonoBehaviour {
         }
 	}
 
+    /**
+    *   Repsawan Counter.
+    */
     IEnumerator respawn(GameObject bot)
     {
         if(respawnTimer > 0)
@@ -149,6 +159,9 @@ public class GameManager : MonoBehaviour {
         yield return null;
     }
 
+    /**
+    *   Dump data to file.
+    */
     void OnApplicationQuit()
     {
         SaveData.SaveBotData(BotListSaveData);
@@ -159,43 +172,64 @@ public class GameManager : MonoBehaviour {
         
     }
 
+
+    /**
+    *   gui setup 
+    */
+    
+
     void OnGUI()
     {
-        /*if (GUI.Button(new Rect(10, 70, 200, 30), "Switch Camera"))
-        {
-            // TODO sort out blank cameras.
-            if (cameraList[currentCamNo].gameObject.activeSelf == false)
-            {
-                currentCamNo++;
-                return;
-            }
-            else if(cameraList[currentCamNo].gameObject.activeSelf == true)
-            {
-                currentCam.enabled = false;
-                currentCam = cameraList[currentCamNo];
-                currentCam.enabled = true;
-                currentCamNo++;
-                if (currentCamNo >= cameraList.Count())
-                {
-                    currentCamNo = 0;
-                }
-            }
-        }*/
-
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
+            GUILayout.TextArea("Enter Number Of bots");
+            botsnum = GUILayout.TextField( botsnum, 20);
+
+            GUILayout.TextArea("Enter Number of Health Items");
+            numOfHelathItems = GUILayout.TextField(numOfHelathItems, 20);
+
             if (GUI.Button(new Rect(10, 140, 200, 30), "launch game"))
             {
                 SceneManager.LoadScene(1);
+                // Capture number of bots.
+                numOfBots = Convert.ToInt32(botsnum);
+                _healthITems = Convert.ToInt32(numOfHelathItems);
+            }
+            
+        }
+        else
+        {
+            // TODO toogle spped increase
+            // spped increase button
+            if (GUI.Button(new Rect(10, 35, 200, 30), "increase Speed"))
+            {
+                Time.timeScale = 2.0f;
+            }
 
-                //SetUp();
+            // camera switcher.
+            if (GUI.Button(new Rect(10, 70, 200, 30), "Switch Camera"))
+            {
+                // TODO sort out blank cameras.
+                if (cameraList[currentCamNo].gameObject.activeSelf == false)
+                {
+                    currentCamNo++;
+                    return;
+                }
+                else if (cameraList[currentCamNo].gameObject.activeSelf == true)
+                {
+                    currentCam.enabled = false;
+                    currentCam = cameraList[currentCamNo];
+                    currentCam.enabled = true;
+                    currentCamNo++;
+                    if (currentCamNo >= cameraList.Count())
+                    {
+                        currentCamNo = 0;
+                    }
+                }
             }
         }
 
-        if (GUI.Button(new Rect(10, 35, 200, 30), "increase Speed"))
-        {
-            Time.timeScale = 2.0f;
-        }
+        
 
     }
 }

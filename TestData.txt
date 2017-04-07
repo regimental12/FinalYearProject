@@ -8,18 +8,3 @@ Deaths: 0
 Kills: 0
 
 
-BOT 2
-Deaths: 0
-Kills: 0
-
-
-BOT 3
-Deaths: 0
-Kills: 0
-
-
-BOT 4
-Deaths: 0
-Kills: 0
-
-

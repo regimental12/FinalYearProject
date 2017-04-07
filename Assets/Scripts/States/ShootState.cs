@@ -33,7 +33,7 @@ public class ShootState : IBaseState
         }
         else
         {
-            bot.exitShootState();
+            bot.exitState();
         }
 
         Shoot();
