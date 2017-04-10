@@ -46,7 +46,7 @@ public class FuzzyNewController : MonoBehaviour {
     {
         float result = 0;
 
-        result = fLogic.getValues(Health, Ammo, Range);
+        //result = fLogic.getValues(Health, Ammo, Range);
         Debug.Log(result);
 
         if (result <= -2)

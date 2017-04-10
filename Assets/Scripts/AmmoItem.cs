@@ -3,7 +3,7 @@ using System.Collections;
 
 public class AmmoItem : MonoBehaviour {
 
-    bool active = true;
+    public bool active = true;
     float timeOut = 5.0f;
     float timeOutReset = 5.0f;
     public GameObject cube;
@@ -16,7 +16,7 @@ public class AmmoItem : MonoBehaviour {
             cube.SetActive(false);
             active = false;
             col.enabled = false;
-            collider.gameObject.GetComponent<BotController>().AmmoAmount += 10;
+            collider.gameObject.GetComponent<BotController2>().Ammo += 10;
         }
 
     }

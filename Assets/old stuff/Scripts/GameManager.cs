@@ -234,7 +234,7 @@ public class GameManager : MonoBehaviour {
     }
 }
 
-public class BotData
+/*public class BotData
 {
     private string _botName;
     public string BotName { get; set; }
@@ -251,4 +251,4 @@ public class BotData
     }
 
     
-}
+}*/

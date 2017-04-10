@@ -6,17 +6,17 @@ using System.Collections;
 public class FuzzyLogic 
 {
 
-    float healthLow = 0;
-    float healthMid = 0;
-    float healthHigh = 0;
+    static float healthLow = 0;
+    static float healthMid = 0;
+    static float healthHigh = 0;
 
-    float ammoLow = 0;
-    float ammoMid = 0;
-    float ammoHigh = 0;
+    static float ammoLow = 0;
+    static float ammoMid = 0;
+    static float ammoHigh = 0;
 
-    float rangeLow = 0;
-    float rangeMid = 0;
-    float rangeHigh = 0;
+    static float rangeLow = 0;
+    static float rangeMid = 0;
+    static float rangeHigh = 0;
 
     // Membership functions.
 
@@ -28,7 +28,7 @@ public class FuzzyLogic
                     __x0/
         */
 
-    float FuzzyGrade(float value, float x0, float x1)
+    static float FuzzyGrade(float value, float x0, float x1)
     {
         float result = 0;
         float x = value;
@@ -55,7 +55,7 @@ public class FuzzyLogic
                    \x1__
     */
 
-    float FuzzyReverseGrade(float value, float x0, float x1)
+    static float FuzzyReverseGrade(float value, float x0, float x1)
     {
         float result = 0;
         float x = value;
@@ -82,7 +82,7 @@ public class FuzzyLogic
                 __x0/  \x2__
     */
 
-    float FuzzyTriangle(float value, float x0, float x1, float x2)
+    static float FuzzyTriangle(float value, float x0, float x1, float x2)
     {
         float result = 0;
         float x = value;
@@ -112,7 +112,7 @@ public class FuzzyLogic
             __x0/        \x3__
     */
 
-    float FuzzyTrapezoid(float value, float x0, float x1, float x2, float x3)
+    static float FuzzyTrapezoid(float value, float x0, float x1, float x2, float x3)
     {
         float result = 0;
         float x = value;
@@ -143,28 +143,28 @@ public class FuzzyLogic
 
     #region
 
-    void EvalHealth(float value)
+    static void EvalHealth(float value)
     {
         healthLow = FuzzyReverseGrade(value, 0, 40);
         healthMid = FuzzyTriangle(value, 30, 50, 80);
         healthHigh = FuzzyGrade(value, 50, 100);
     }
 
-    void EvalAmmo(float value)
+    static void EvalAmmo(float value)
     {
-        ammoLow = FuzzyReverseGrade(value, 0, 40);
-        ammoMid = FuzzyTriangle(value, 30, 40, 70);
-        ammoHigh = FuzzyGrade(value, 60, 100);
+        ammoLow = FuzzyReverseGrade(value * 10, 0, 40);   // 0,40
+        ammoMid = FuzzyTriangle(value * 10, 30, 40, 70);  // 30,40,70
+        ammoHigh = FuzzyGrade(value * 10, 60, 100);       // 60,100
     }
 
-    void EvalRange(float value)
+    static void EvalRange(float value)
     {
         rangeLow = FuzzyReverseGrade(value, 20, 40);
         rangeMid = FuzzyTriangle(value, 30, 40, 50);
         rangeHigh = FuzzyGrade(value, 40, 50);
     }
 
-    public float getValues(float health , float ammo , float range)
+    static public float getValues(float health , float ammo , float range)
     {
         EvalHealth(health);
         EvalAmmo(ammo);
@@ -179,7 +179,7 @@ public class FuzzyLogic
 
     #region
 
-    float CollectHealth()
+    static float CollectHealth()
     {
         float result = 0;
 
@@ -188,7 +188,7 @@ public class FuzzyLogic
         return result;
     }
 
-    float CollectAmmo()
+    static float CollectAmmo()
     {
         float result = 0;
 
@@ -197,7 +197,7 @@ public class FuzzyLogic
         return result;
     }
 
-    float Roam()
+    static float Roam()
     {
         float result = 0;
 
@@ -206,11 +206,11 @@ public class FuzzyLogic
         return result;
     }
 
-    float Shoot()
+    static float Shoot()
     {
         float result = 0;
 
-        result = Math.Min(rangeLow, Math.Max(1 - ammoLow, 1 - healthLow));
+        result = Math.Min(Math.Max(rangeLow, rangeMid), Math.Max(1 - ammoLow, 1 - healthLow));
 
         return result;
     }
@@ -221,7 +221,7 @@ public class FuzzyLogic
 
     #region
 
-    float Singleton()
+    static float Singleton()
     {
         // divide by zero check
         float check = healthLow + healthMid + healthHigh + ammoLow + ammoMid + ammoHigh + rangeLow + rangeMid + rangeHigh;

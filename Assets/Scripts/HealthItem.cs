@@ -3,7 +3,7 @@ using System.Collections;
 
 public class HealthItem : MonoBehaviour
 {
-    bool active = true;
+    public bool active = true;
     float timeOut = 5.0f;
     float timeOutReset = 5.0f;
     public GameObject cube;
@@ -16,8 +16,8 @@ public class HealthItem : MonoBehaviour
             cube.SetActive(false);
             col.enabled = false;
             active = false;
-            //collider.SendMessage("UpdateHealth", +50);
-            collider.gameObject.GetComponent<BotController>().Health += 50;
+            collider.gameObject.GetComponent<BotController2>().Health += 50;
+            
         }
           
     }
