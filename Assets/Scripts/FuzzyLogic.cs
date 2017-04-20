@@ -145,16 +145,16 @@ public class FuzzyLogic
 
     static void EvalHealth(float value)
     {
-        healthLow = FuzzyReverseGrade(value, 0, 40);
-        healthMid = FuzzyTriangle(value, 30, 50, 80);
-        healthHigh = FuzzyGrade(value, 50, 100);
+        healthLow = FuzzyReverseGrade(value, 0, 20);
+        healthMid = FuzzyTriangle(value, 10, 40, 50);
+        healthHigh = FuzzyGrade(value, 30, 100);
     }
 
     static void EvalAmmo(float value)
     {
-        ammoLow = FuzzyReverseGrade(value * 10, 0, 40);   // 0,40
-        ammoMid = FuzzyTriangle(value * 10, 30, 40, 70);  // 30,40,70
-        ammoHigh = FuzzyGrade(value * 10, 60, 100);       // 60,100
+        ammoLow = FuzzyReverseGrade(value * 10, 0, 20);   // 0,40
+        ammoMid = FuzzyTriangle(value * 10, 10, 20, 50);  // 30,40,70
+        ammoHigh = FuzzyGrade(value * 10, 30, 100);       // 60,100
     }
 
     static void EvalRange(float value)

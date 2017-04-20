@@ -35,7 +35,6 @@ public class Roam : IBaseState {
             if (Vector3.Distance(transform.position, GO.transform.position) < 100.0f)
             {
                 BC.Range = Vector3.Distance(transform.position, GO.transform.position);
-                /*BC.goEnGameObject = GO;*/
                 if (Vector3.Distance(transform.position, GO.transform.position) < 50.0f)
                 {
                     Vector3 targetDir = GO.transform.position - transform.position;

@@ -17,7 +17,7 @@ public class GameManager2 : MonoBehaviour {
         get { return instance; }
     }
 
-    public object SceneManagment { get; private set; }
+    //public object SceneManagment { get; private set; }
 
     private void Awake()
     {
@@ -40,10 +40,11 @@ public class GameManager2 : MonoBehaviour {
     public int _noOfHealthItems;
     public int _noOfAmmoItems;
 
-    string bots = "0";
-    string fuzzyBots = "2";
-    string hItems = "5";
-    string aItems = "5";
+    string bots = "5";
+    string fuzzyBots = "5";
+    string hItems = "10";
+    string aItems = "10";
+    string gameTimer = "300";
 
     public GameObject _goHealthItem;
     public GameObject _goAmmoitem;
@@ -60,6 +61,9 @@ public class GameManager2 : MonoBehaviour {
     public List<BotData> _lbotDataSaveList = new List<BotData>();
 
     public float respwanTimer = 5.0f;
+
+    public float _gametimer = 300;
+    public bool gameRunning = false;
 
     #endregion
 
@@ -80,7 +84,14 @@ public class GameManager2 : MonoBehaviour {
                 StartCoroutine(Respawn(bot));
             }
         }
-        
+        if (gameRunning)
+        {
+            _gametimer -= Time.deltaTime;
+            if (_gametimer <= 0)
+            {
+                Application.Quit();
+            }
+        }   
     }
 
     private IEnumerator Respawn(GameObject bot)
@@ -99,13 +110,16 @@ public class GameManager2 : MonoBehaviour {
 
     void OnLevelWasLoaded(int level)
     {
-        Instantiate(_goWaypoints);
-        _lwayPointList = GameObject.FindGameObjectsWithTag("WayPoint").ToList();
-        InstantiateBots(_goBot , _noOfBots , "BOT");
-        InstantiateBots(_goFuzzyBot , _noFuzzyBots , "FUZZYBOT");
-        SetUpItems(_noOfHealthItems , _lhealthItemList , _goHealthItem);
-        SetUpItems(_noOfAmmoItems , _lammoItemList , _goAmmoitem);
-        SetBotsActive();
+        if (level == 1)
+        {
+            Instantiate(_goWaypoints);
+            _lwayPointList = GameObject.FindGameObjectsWithTag("WayPoint").ToList();
+            InstantiateBots(_goBot, _noOfBots, "BOT");
+            InstantiateBots(_goFuzzyBot, _noFuzzyBots, "FUZZYBOT");
+            SetUpItems(_noOfHealthItems, _lhealthItemList, _goHealthItem);
+            SetUpItems(_noOfAmmoItems, _lammoItemList, _goAmmoitem);
+            SetBotsActive();
+        }
     }
 
     private void SetUpItems(int count , List<GameObject> list , GameObject objectToCreate)
@@ -173,8 +187,6 @@ public class GameManager2 : MonoBehaviour {
         // Game Setup Options
         if (SceneManager.GetActiveScene().name == "Scene2")
         {
-            
-
             GUILayout.TextArea("Enter Number Of bots");
             bots = GUILayout.TextField(bots, 20);
 
@@ -187,27 +199,29 @@ public class GameManager2 : MonoBehaviour {
             GUILayout.TextArea("Enter Number of Ammo Items");
             aItems = GUILayout.TextField(aItems, 20);
 
-            if (GUI.Button(new Rect(0, 200, 200, 30), "launch game"))
+            GUILayout.TextArea("Enter Game Time");
+            gameTimer = GUILayout.TextField(gameTimer, 20);
+
+            if (GUI.Button(new Rect(0, 250, 200, 30), "launch game"))
             {
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene("Scene1" , LoadSceneMode.Single);
                 _noOfBots = Convert.ToInt32(bots);
                 _noFuzzyBots = Convert.ToInt32(fuzzyBots);
                 _noOfHealthItems = Convert.ToInt32(hItems);
                 _noOfAmmoItems = Convert.ToInt32(aItems);
+                _gametimer = Convert.ToInt32(gameTimer);
+                gameRunning = true;
             }
         }
         // In Game Options
-        else
+        else if(SceneManager.GetActiveScene().name == "Scene1")
         {
             if (GUI.Button(new Rect(10, 35, 200, 30), "Increase Speed"))
             {
                 Time.timeScale = 2.0f;
             }
 
-            // camera switcher.
-            if (GUI.Button(new Rect(10, 70, 200, 30), "Switch Camera"))
-            {
-            }
+            GUI.Label(new Rect(Screen.width/2 , 20 , 200 , 30), String.Format("{0:D}" , _gametimer.ToString()) );
         }
     }
 }

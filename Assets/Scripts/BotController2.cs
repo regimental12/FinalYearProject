@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
-using UnityEditor;
+
 
 public class BotController2 : MonoBehaviour {
 
@@ -150,7 +150,7 @@ public class BotController2 : MonoBehaviour {
 
 
 
-[CustomEditor(typeof(BotController2))]
+/*[CustomEditor(typeof(BotController2))]
 public class TakeDamage2 : Editor
 {
     public override void OnInspectorGUI()
@@ -169,4 +169,4 @@ public class TakeDamage2 : Editor
             bot.Ammo -= 10;
         }
     }
-}
+}*/
