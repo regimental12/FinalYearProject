@@ -1,0 +1,50 @@
+BOT: 0
+Deaths: 3
+Kills: 0
+
+
+BOT: 1
+Deaths: 0
+Kills: 5
+
+
+BOT: 2
+Deaths: 2
+Kills: 2
+
+
+BOT: 3
+Deaths: 0
+Kills: 3
+
+
+BOT: 4
+Deaths: 1
+Kills: 2
+
+
+FUZZYBOT: 0
+Deaths: 2
+Kills: 4
+
+
+FUZZYBOT: 1
+Deaths: 3
+Kills: 1
+
+
+FUZZYBOT: 2
+Deaths: 3
+Kills: 2
+
+
+FUZZYBOT: 3
+Deaths: 2
+Kills: 0
+
+
+FUZZYBOT: 4
+Deaths: 4
+Kills: 1
+
+

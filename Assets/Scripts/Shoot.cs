@@ -16,6 +16,11 @@ public class Shoot : IBaseState
 
     public float shootInnacuracy = 2f;
 
+    public LineRenderer lineRenderer;
+    public Vector3[] gunBeam = new Vector3[2] {Vector3.zero, Vector3.zero};
+    public float gunWidth = 0.3f;
+
+
     // Use this for initialization
     void Start ()
     {
@@ -24,6 +29,10 @@ public class Shoot : IBaseState
         {
             throw new NullReferenceException("bc is null");
         }
+
+        lineRenderer = gameObject.AddComponent<LineRenderer>();
+        lineRenderer.SetPositions(gunBeam);
+        lineRenderer.SetWidth(gunWidth , gunWidth);
 	}
 	
 	// Update is called once per frame
@@ -74,7 +83,12 @@ public class Shoot : IBaseState
                 // Raycast shooting
                 RaycastHit hit;
                 Physics.Raycast(transform.position, dir, out hit, 40.0f);
-                Debug.DrawRay(transform.position, dir, Color.green, 1.0f);
+                //Debug.DrawRay(transform.position, dir, Color.green, 1.0f);
+                lineRenderer.enabled = true;
+                Vector3 startPosition = transform.position;
+                Vector3 endposition = hit.point;
+                lineRenderer.SetPosition(0, startPosition);
+                lineRenderer.SetPosition(1,endposition);
 
                 // Send hit bot a health update message.
                 if (hit.transform != null)
@@ -100,9 +114,12 @@ public class Shoot : IBaseState
         else
         {
             shootCoolDown -= Time.deltaTime;
+            lineRenderer.enabled = false;
             return;
         }
     }
+
+    
 
     public override void StateUpdate()
     {

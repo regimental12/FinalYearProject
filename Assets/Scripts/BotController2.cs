@@ -138,8 +138,9 @@ public class BotController2 : MonoBehaviour {
     // Use this for initialization
     public virtual void Start ()
     {
-        
-	}
+        MeshRenderer mySkin = this.transform.GetComponent<MeshRenderer>();
+        mySkin.material.color = new Color(UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f), UnityEngine.Random.Range(0.0f, 1.0f));
+    }
 
     // Update is called once per frame
     public virtual void Update ()
